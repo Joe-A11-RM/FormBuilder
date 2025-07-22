@@ -139,6 +139,7 @@ function FormDroppable({
 			padding: "20px",
 			overflowY: "scroll",
 			position: "relative",
+			maxHeight: "100vh",
 		};
 
 		if (collapsed.inputsCollapsed && collapsed.optionsCOllapsed) {
