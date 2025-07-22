@@ -28,7 +28,7 @@ export default function FormDroppableItems({
 	const style = {
 		transform: CSS.Transform.toString(transform),
 		transition,
-		padding: "10px",
+		padding: "8px",
 		marginBottom: "4px",
 		border: "1px solid #ccc",
 		borderRadius: "6px",
@@ -52,14 +52,14 @@ export default function FormDroppableItems({
 			}}
 			className={
 				activeInput === item?.key && active
-					? "task-form-inputs-active w-100"
-					: "task-form-inputs w-100"
+					? "task-form-inputs-active"
+					: "task-form-inputs"
 			}
 		>
 			<div
 				{...attributes}
 				{...listeners}
-				style={{ cursor: "grab", paddingRight: "8px" }}
+				style={{ cursor: "grab", paddingRight: "6px" }}
 				onClick={(e) => e.stopPropagation()}
 				onMouseDown={(e) => {
 					e.stopPropagation();
@@ -74,7 +74,7 @@ export default function FormDroppableItems({
 			>
 				<MdDragIndicator size={20} />
 			</div>
-			<div className="w-100">{getInputType(item)}</div>
+			<div style={{ flexGrow: 1 }}>{getInputType(item)}</div>
 			{activeInput === item.key && active && (
 				<FormDroppableFunctions
 					item={item}
