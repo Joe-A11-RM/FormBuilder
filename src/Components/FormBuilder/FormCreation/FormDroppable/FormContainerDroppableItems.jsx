@@ -81,6 +81,7 @@ export default function FormContainerDroppableItems({
 					item={item}
 					setDroppedItems={setDroppedItems}
 					allData={allItems}
+					activeInput={activeInput}
 				/>
 			)}
 		</div>

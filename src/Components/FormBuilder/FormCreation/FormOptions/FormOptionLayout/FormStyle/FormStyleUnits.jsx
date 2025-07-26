@@ -84,7 +84,6 @@ export default function FormStyleUnits({
 			});
 		}
 	}, [unit, basicCode, attribute]);
-
 	return (
 		<div className="task-option-item">
 			<label htmlFor={id} className="form-label">
@@ -94,7 +93,13 @@ export default function FormStyleUnits({
 				<AntdInput
 					type="number"
 					value={basicCode}
-					onChange={(e) => setBasicCode(e.target.value)}
+					onChange={(e) => {
+						if (styleAttribute === "width") {
+							setBasicCode(e.target.value ? e.target.value : "100");
+						} else {
+							setBasicCode(e.target.value ? e.target.value : "0");
+						}
+					}}
 					min={0}
 					placeholder={placeholder}
 				/>

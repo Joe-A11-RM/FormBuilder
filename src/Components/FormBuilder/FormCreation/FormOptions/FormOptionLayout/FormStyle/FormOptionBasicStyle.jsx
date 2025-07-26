@@ -100,6 +100,29 @@ export default function FormOptionBasicStyle({
 				setCode={setCode}
 				placeholder="Enter width"
 			/>
+			{(activeItem.name === "Header" ||
+				activeItem.name === "Button" ||
+				activeItem.name === "Label" ||
+				activeItem.name === "Link" ||
+				activeItem.name === "Progress_Circle" ||
+				activeItem.name === "Progress_Line" ||
+				activeItem.name === "Image") && (
+				<>
+					<FormOptionAlignment
+						title="text align"
+						options={[
+							{ label: "Left", value: "left" },
+							{ label: "Center", value: "center" },
+							{ label: "Right", value: "right" },
+						]}
+						activeItem={activeItem.css.alignItems}
+						updateActiveItem={updateActiveItem}
+						setCode={setCode}
+						attribute="textAlign"
+						placeholder="Choose alignment"
+					/>
+				</>
+			)}
 			{(activeItem.name === "Container" ||
 				activeItem.name === "Button" ||
 				activeItem.name === "Image") && (

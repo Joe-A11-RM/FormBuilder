@@ -1,4 +1,11 @@
-import React, { useMemo, useCallback, useState, Fragment } from "react";
+import React, {
+	useMemo,
+	useCallback,
+	useState,
+	Fragment,
+	useRef,
+	useEffect,
+} from "react";
 import { DragOverlay, useDroppable } from "@dnd-kit/core";
 import {
 	SortableContext,
@@ -59,6 +66,33 @@ function FormDroppable({
 	childLevel,
 	topLevel,
 }) {
+	const containerRef = useRef(null);
+	const isDragging = !!active;
+	useEffect(() => {
+		if (!isDragging) return;
+		const container = containerRef.current;
+		if (!container) return;
+
+		const scrollSpeed = 10;
+		const edgeOffset = 100;
+
+		const handleDragScroll = (e) => {
+			const { top, bottom } = container.getBoundingClientRect();
+			const mouseY = e.clientY;
+
+			if (mouseY < top + edgeOffset) {
+				container.scrollTop -= scrollSpeed;
+			} else if (mouseY > bottom - edgeOffset) {
+				container.scrollTop += scrollSpeed;
+			}
+		};
+
+		window.addEventListener("dragover", handleDragScroll);
+		return () => {
+			window.removeEventListener("dragover", handleDragScroll);
+		};
+	}, [isDragging]);
+
 	const { setNodeRef, isOver } = useDroppable({ id: "task-droppable" });
 	// Avoid recreation on each render
 	const getInputType = useCallback(
@@ -167,7 +201,14 @@ function FormDroppable({
 			)}
 
 			{items.map((item, index) => (
-				<Fragment key={index}>
+				<div
+					key={index}
+					style={{
+						marginBottom:
+							index === items.length - 1 && isDragging ? "120px" : "0px",
+						transition: "margin 0.2s",
+					}}
+				>
 					{dropIndicatorIndex === index &&
 						dragDirection === "up" &&
 						topLevel && (
@@ -205,7 +246,7 @@ function FormDroppable({
 								}}
 							/>
 						)}
-				</Fragment>
+				</div>
 			))}
 
 			<DragOverlay>

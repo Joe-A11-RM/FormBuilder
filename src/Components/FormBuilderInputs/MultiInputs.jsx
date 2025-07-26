@@ -1,5 +1,5 @@
 import { useDroppable } from "@dnd-kit/core";
-import React from "react";
+import React, { Fragment } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import FormDroppableFunctions from "../FormBuilder/FormCreation/FormDroppable/FormDroppableFunctions";
@@ -86,6 +86,7 @@ function SortableContainerItem({
 					setDroppedItems={setDroppedItems}
 					container={true}
 					containerKey={containerKey}
+					activeInput={activeInput}
 				/>
 			)}
 		</div>
@@ -139,7 +140,7 @@ export default function Container({
 				</h4>
 			) : (
 				container.map((item, index) => (
-					<>
+					<Fragment key={index}>
 						{dropIndicatorIndex === index &&
 							dragDirection === "up" &&
 							childLevel && (
@@ -179,7 +180,7 @@ export default function Container({
 									}}
 								/>
 							)}
-					</>
+					</Fragment>
 				))
 			)}
 		</div>

@@ -80,6 +80,8 @@ export default function FormDroppableItems({
 					item={item}
 					setDroppedItems={setDroppedItems}
 					allData={allItems}
+					containerKey={item.key}
+					activeInput={activeInput}
 				/>
 			)}
 		</div>

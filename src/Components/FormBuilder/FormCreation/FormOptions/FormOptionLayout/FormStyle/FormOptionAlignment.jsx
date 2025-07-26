@@ -49,6 +49,9 @@ export default function FormOptionAlignment({
 				case "justifyContent":
 					styleAttr = "justify-content";
 					break;
+				case "textAlign":
+					styleAttr = "text-align";
+					break;
 				default:
 					styleAttr = attribute; // fallback
 			}
