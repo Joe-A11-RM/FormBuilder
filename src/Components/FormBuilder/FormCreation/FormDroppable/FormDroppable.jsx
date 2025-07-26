@@ -33,6 +33,7 @@ import SnippetCamera from "../../../FormBuilderInputs/Camera";
 import Container from "../../../FormBuilderInputs/MultiInputs";
 
 import FormDroppableItems from "./FormDroppableItems";
+import FormDroppableHeader from "./FormDroppableHeader";
 
 const overlayStyle = {
 	width: "160px",
@@ -65,8 +66,12 @@ function FormDroppable({
 	dragDirection,
 	childLevel,
 	topLevel,
+	FormData,
 }) {
 	const containerRef = useRef(null);
+	const [width, setWidth] = useState("100%");
+	const [height, setHeight] = useState("calc(100vh - 50px)");
+	const [preview, setPreview] = useState(false);
 	const isDragging = !!active;
 	useEffect(() => {
 		if (!isDragging) return;
@@ -170,88 +175,114 @@ function FormDroppable({
 		const baseStyle = {
 			border: "1px dashed gray",
 			backgroundColor: isOver ? "#0f69361f" : "#fafafa",
-			padding: "20px",
 			overflowY: "scroll",
 			position: "relative",
-			maxHeight: "100vh",
+			padding: "20px",
 		};
 
-		if (collapsed.inputsCollapsed && collapsed.optionsCOllapsed) {
-			return { ...baseStyle, width: "98%" };
-		}
-		if (collapsed.inputsCollapsed || collapsed.optionsCOllapsed) {
-			return { ...baseStyle, width: "73%" };
-		}
-		return { ...baseStyle, width: "50%" };
+		return baseStyle;
 	}, [collapsed.inputsCollapsed, collapsed.optionsCOllapsed, isOver]);
-
+	const checkWidth = () => {
+		if (collapsed.inputsCollapsed && collapsed.optionsCOllapsed) {
+			return "98%";
+		} else if (collapsed.inputsCollapsed || collapsed.optionsCOllapsed) {
+			return "74%";
+		} else {
+			return "50%";
+		}
+	};
 	return (
-		<div ref={setNodeRef} style={containerStyle}>
-			{items.length === 0 && (
-				<h4
-					style={{
-						display: "flex",
-						alignItems: "center",
-						justifyContent: "center",
-						height: "100%",
-					}}
-				>
-					Drop Area
-				</h4>
+		<div style={{ width: checkWidth() }}>
+			{items?.length > 0 && (
+				<FormDroppableHeader
+					setHeight={setHeight}
+					setWidth={setWidth}
+					setPreview={setPreview}
+					preview={preview}
+					data={items}
+					FormData={FormData}
+				/>
 			)}
+			<div
+				ref={setNodeRef}
+				style={{
+					...containerStyle,
+					width: width,
+					height: items?.length > 0 && height,
+					margin: "auto",
+					transition: "width 0.3s, height 0.3s",
+				}}
+			>
+				<div ref={containerRef}>
+					{items.length === 0 && (
+						<h4
+							style={{
+								display: "flex",
+								alignItems: "center",
+								justifyContent: "center",
+								height: "100vh",
+							}}
+						>
+							Drop Area
+						</h4>
+					)}
 
-			{items.map((item, index) => (
-				<div
-					key={index}
-					style={{
-						marginBottom:
-							index === items.length - 1 && isDragging ? "120px" : "0px",
-						transition: "margin 0.2s",
-					}}
-				>
-					{dropIndicatorIndex === index &&
-						dragDirection === "up" &&
-						topLevel && (
-							<div
-								style={{
-									height: "2px",
-									backgroundColor: "#72777253",
-									margin: "2px 0",
-									width: "100%",
-									zIndex: "99999",
-								}}
+					{items.map((item, index) => (
+						<div
+							key={index}
+							style={{
+								marginBottom:
+									index === items.length - 1 && isDragging ? "120px" : "0px",
+								transition: "margin 0.2s",
+							}}
+						>
+							{dropIndicatorIndex === index &&
+								dragDirection === "up" &&
+								topLevel && (
+									<div
+										style={{
+											height: "2px",
+											backgroundColor: "#72777253",
+											margin: "2px 0",
+											width: "100%",
+											zIndex: "99999",
+										}}
+									/>
+								)}
+
+							<FormDroppableItems
+								key={item.key}
+								item={item}
+								getInputType={getInputType}
+								activeInput={activeInput}
+								setActiveInput={setActiveInput}
+								setDroppedItems={setDroppedItems}
+								active={active}
+								setActive={setActive}
+								allItems={items}
 							/>
-						)}
-					<FormDroppableItems
-						key={item.key}
-						item={item}
-						getInputType={getInputType}
-						activeInput={activeInput}
-						setActiveInput={setActiveInput}
-						setDroppedItems={setDroppedItems}
-						active={active}
-						setActive={setActive}
-						allItems={items}
-					/>
-					{dropIndicatorIndex === index &&
-						dragDirection === "down" &&
-						topLevel && (
-							<div
-								style={{
-									height: "2px",
-									backgroundColor: "#72777253",
-									margin: "2px 0",
-									width: "100%",
-									zIndex: "99999",
-								}}
-							/>
-						)}
+
+							{dropIndicatorIndex === index &&
+								dragDirection === "down" &&
+								topLevel && (
+									<div
+										style={{
+											height: "2px",
+											backgroundColor: "#72777253",
+											margin: "2px 0",
+											width: "100%",
+											zIndex: "99999",
+										}}
+									/>
+								)}
+						</div>
+					))}
 				</div>
-			))}
 
-			<DragOverlay>
-				{activeInput && <div style={overlayStyle}>{activeInput}</div>}
-			</DragOverlay>
+				<DragOverlay>
+					{activeInput && <div style={overlayStyle}>{activeInput}</div>}
+				</DragOverlay>
+			</div>
 		</div>
 	);
 }

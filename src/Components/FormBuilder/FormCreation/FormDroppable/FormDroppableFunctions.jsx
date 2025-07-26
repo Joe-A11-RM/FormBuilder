@@ -91,7 +91,6 @@ export default function FormDroppableFunctions({
 						.replace(/\s+/g, "-")}-${uuidv4().slice(0, 8)}`,
 					container: clonedChildren,
 				};
-				console.log("Cloned Container:", clonedContainer);
 				updated.splice(index + 1, 0, clonedContainer);
 				return updated;
 			});
@@ -118,7 +117,6 @@ export default function FormDroppableFunctions({
 								cloned,
 								...containerItem.container.slice(itemIndex + 1),
 							];
-							console.log("Cloned Item in Container:", cloned);
 							return { ...containerItem, container: newContainer };
 						}
 					}
